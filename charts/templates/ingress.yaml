@@ -1,0 +1,41 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: microservices-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      # Direct routing to Auth Microservice
+      # 1. AUTH API (Must come before the frontend catch-all)
+      - path: /api/auth/(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 4001
+
+      # Direct routing to Task Microservice
+      # 2. TASK API (Must come before the frontend catch-all)
+      - path: /api/task/(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: task-service
+            port:
+              number: 4002
+
+      # Static Frontend files routing
+      # 3. FRONTEND (The catch-all regex captures file paths like 'assets/main.js' and passes them through intact)
+      - path: /?(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: frontend-service
+            port:
+              number: 80

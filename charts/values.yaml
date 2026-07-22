@@ -1,0 +1,10 @@
+replicaCount: 1
+
+images:
+  frontend: "abstraxlk/task-management-frontend:3.1"
+  authService: "abstraxlk/task-management-auth-service:5.1"
+  taskService: "abstraxlk/task-management-task-service:5.1"
+
+eso:
+  # Replace the below string with the 'eso_iam_role_arn' output from Terraform
+  iamRoleArn: "arn:aws:iam::860977520998:role/eso-service-account-role"
