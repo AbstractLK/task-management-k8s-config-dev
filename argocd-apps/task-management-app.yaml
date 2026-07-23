@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: task-management-app
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2" # Wait for Wave 1 to be Healthy
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/AbstractLK/task-management-k8s-config-dev.git
+    targetRevision: HEAD
+    path: charts # This points directly to your custom Helm chart folder!
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default # Or whichever namespace you use for your app
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
