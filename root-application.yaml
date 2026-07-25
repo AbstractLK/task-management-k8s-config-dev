@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: root-application
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io # finalizer tells ArgoCD, "Before you delete this app, go and delete every single resource inside of it."
 spec:
   project: default
   source:
