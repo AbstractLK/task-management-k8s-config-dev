@@ -1,9 +1,9 @@
 replicaCount: 1
 
 images:
-  frontend: "abstraxlk/task-management-frontend:v14"
-  authService: "abstraxlk/task-management-auth-service:v14"
-  taskService: "abstraxlk/task-management-task-service:v14"
+  frontend: "abstraxlk/task-management-frontend:v16"
+  authService: "abstraxlk/task-management-auth-service:v16"
+  taskService: "abstraxlk/task-management-task-service:v16"
 
 eso:
   # Replace the below string with the 'eso_iam_role_arn' output from Terraform
