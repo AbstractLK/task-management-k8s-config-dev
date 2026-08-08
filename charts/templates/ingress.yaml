@@ -22,7 +22,7 @@ spec:
 
       # Direct routing to Task Microservice
       # 2. TASK API (Must come before the frontend catch-all)
-      - path: /api/task/(.*)
+      - path: /api/tasks/(.*)
         pathType: ImplementationSpecific
         backend:
           service:
