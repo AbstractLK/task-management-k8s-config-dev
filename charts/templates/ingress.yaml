@@ -12,7 +12,7 @@ spec:
       paths:
       # Direct routing to Auth Microservice
       # 1. AUTH API (Must come before the frontend catch-all)
-      - path: /api/auth/(.*)
+      - path: /api/auth(.*)
         pathType: ImplementationSpecific
         backend:
           service:
@@ -22,7 +22,7 @@ spec:
 
       # Direct routing to Task Microservice
       # 2. TASK API (Must come before the frontend catch-all)
-      - path: /api/tasks/(.*)
+      - path: /api/tasks(.*)
         pathType: ImplementationSpecific
         backend:
           service:
