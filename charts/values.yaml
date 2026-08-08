@@ -1,7 +1,7 @@
 replicaCount: 1
 
 images:
-  frontend: "abstraxlk/task-management-frontend:v33"
+  frontend: "abstraxlk/task-management-frontend:v34"
   authService: "abstraxlk/task-management-auth-service:v20"
   taskService: "abstraxlk/task-management-task-service:v20"
 
