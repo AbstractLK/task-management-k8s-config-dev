@@ -146,6 +146,7 @@ bash
 kubectl delete namespace argocd
 kubectl delete namespace ingress-nginx
 kubectl delete namespace external-secrets
+kubectl delete namespace monitoring
 ```
 
 ### **Step 4: Destroy Infrastructure (Optional)**
