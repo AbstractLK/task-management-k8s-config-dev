@@ -1,0 +1,81 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  project: default
+  source:
+    repoURL: 'https://prometheus-community.github.io/helm-charts'
+    targetRevision: 58.2.2
+    chart: kube-prometheus-stack
+    helm:
+      releaseName: prometheus
+      values: |
+        # 1. Disable Alertmanager completely to save RAM
+        alertmanager:
+          enabled: false
+          
+        # 2. Disable EKS Control Plane scrapers 
+        # AWS EKS manages these, so scraping them fails and wastes memory
+        kubeControllerManager:
+          enabled: false
+        kubeEtcd:
+          enabled: false
+        kubeScheduler:
+          enabled: false
+        kubeProxy:
+          enabled: false
+          
+        # 3. Shrink Prometheus Server footprint
+        prometheus:
+          prometheusSpec:
+            replicas: 1
+            retention: 2d # Keep 2 days of metrics instead of the default 15 days
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                cpu: 200m
+                memory: 512Mi # Prevents Prometheus from crashing the t3.small node
+                
+        # 4. Shrink Grafana footprint
+        grafana:
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+              
+        # 5. Cap kube-state-metrics and Node Exporters
+        kube-state-metrics:
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
+        prometheus-node-exporter:
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
